@@ -6,6 +6,15 @@ export type StartIdentityVerificationGravityOutput = {
   identity_verification_flow_url: string
 }
 
+export type IdentityVerificationGravityResponse = {
+  id: string
+  state: string
+  // created_at: string,
+  // updated_at: string,
+  // invitation_expires_at: string
+  user_id: string
+}
+
 export default (accessToken, userID, opts) => {
   const gravityAccessTokenLoader = () => Promise.resolve(accessToken)
   const { gravityLoaderWithAuthenticationFactory } = factories(opts)
@@ -20,6 +29,16 @@ export default (accessToken, userID, opts) => {
         identity_verification_flow_url: "https://staging.artsy.net/auctions",
       })
     },
+    // meIdentityVerificationLoader: () => {
+    //   return Promise.resolve<IdentityVerificationGravityResponse>({
+    //     id: "idv-123",
+    //     user_id: "user-123",
+    //     state: "pending",
+    //   })
+    // },
+    meIdentityVerificationLoader: gravityLoader(
+      id => `identity_verification/${id}`
+    ),
     createAccountRequestLoader: gravityLoader(
       "account_requests",
       {},
